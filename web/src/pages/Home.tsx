@@ -7,7 +7,7 @@ import { CreateAdBanner } from "../components/CreateAdBanner";
 import { useEffect, useState } from "react";
 
 import { CreateAdModal } from "../components/CreateAdModal";
-import axios from "axios";
+import api from "../services/api";
 
 interface Game {
   index: number;
@@ -23,7 +23,7 @@ export function Home() {
   const [games, setGames] = useState<Game[]>([]);
 
   useEffect(() => {
-    axios("http://localhost:3333/games").then((response) => {
+    api("games").then((response) => {
       console.log(response);
       setGames(
         response.data.sort((a: Game, b: Game) => {

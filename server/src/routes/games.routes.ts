@@ -1,38 +1,12 @@
 import Router from "express";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../server";
 import { convertHourStringToMinutes } from "../utils/convert-hour-string-to-minutes";
 import { convertMinutesToHourString } from "../utils/convert-minutes-to-hour-string";
-import axios from "axios";
-const prisma = new PrismaClient();
+import { getTwitchGames } from "../utils/get-twitch-games";
+
 const gamesRoutes = Router();
 
-interface gameResponse {
-  id: string;
-  name: string;
-  box_art_url: string;
-}
-interface IAcessTokenResponse {
-  access_token: string;
-}
-
-async function getTwitchGames(): Promise<gameResponse[]> {
-  const url = "https://id.twitch.tv/oauth2/token";
-  const { data } = await axios.post<IAcessTokenResponse>(url, {
-    client_id: process.env.CLIENT_ID,
-    client_secret: process.env.CLIENT_SECRET,
-    grant_type: "client_credentials",
-  });
-  const bearer = `Bearer ${data.access_token}`;
-  const games = await axios.get("https://api.twitch.tv/helix/games/top", {
-    headers: {
-      Authorization: bearer,
-      "Client-Id": process.env.CLIENT_ID,
-    },
-  });
-  return games.data.data;
-}
-
-gamesRoutes.get("/games", async (req, res) => {
+gamesRoutes.get("/", async (req, res) => {
   const games = await prisma.game.findMany({
     include: {
       _count: {
@@ -73,7 +47,7 @@ gamesRoutes.post("/update-games", async (req, res) => {
   res.json({ message: "Games updated" });
 });
 
-gamesRoutes.post("/games/add", async (req, res) => {
+gamesRoutes.post("/add", async (req, res) => {
   const { title, bannerUrl } = req.body;
   try {
     const game = await prisma.game.create({
@@ -90,7 +64,7 @@ gamesRoutes.post("/games/add", async (req, res) => {
   }
 });
 
-gamesRoutes.post("/games/:id/ads", async (req, res) => {
+gamesRoutes.post("/:id/ads", async (req, res) => {
   const gameId = req.params.id;
   const body = req.body;
   try {
@@ -112,7 +86,7 @@ gamesRoutes.post("/games/:id/ads", async (req, res) => {
   }
 });
 
-gamesRoutes.get("/games/:id/ads", async (req, res) => {
+gamesRoutes.get("/:id/ads", async (req, res) => {
   const gameId = req.params.id;
 
   const ads = await prisma.ad.findMany({

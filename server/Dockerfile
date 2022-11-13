@@ -8,14 +8,14 @@ COPY prisma ./prisma/
 
 COPY tsconfig.json ./
 
+COPY .env ./
+
 COPY . .
+
+ARG EnvironmentVariable
 
 RUN npm install
 
-RUN npx prisma generate
-
-RUN npx prisma migrate deploy
-
 EXPOSE 3333
 
-CMD ["npm", "run", "build"]
+CMD ["npm", "run", "dev"]

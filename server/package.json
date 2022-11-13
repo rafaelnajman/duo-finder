@@ -6,7 +6,11 @@
   "scripts": {
     "build": "tsc",
     "dev": "nodemon -L src/server.ts",
-    "start" : "npx ts-node src/server.ts"
+    "start" : "npx ts-node src/server.ts",
+    "migrate:dev": "prisma migrate dev",
+    "migrate:deploy": "prisma migrate deploy",
+    "migrate:status": "prisma migrate status",
+    "generate": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^4.3.1",

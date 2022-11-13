@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AdBanner } from "../components/AdBanner";
+import api from "../services/api";
 
 interface Ad {
   name: string;
@@ -11,19 +12,22 @@ interface Ad {
   weekDays: string;
   hourStart: number;
   hourEnd: number;
+  useVoiceMail: boolean;
+  gameId: string;
 }
 
 export function Ads() {
   const { id } = useParams();
   const [ads, setAds] = useState<Ad[]>([]);
+
   useEffect(() => {
-    axios
-      .get(`http://localhost:3333/games/${id}/ads`)
+    api
+      .get(`games/${id}/ads`)
       .then((response) => {
         setAds(response.data);
       })
-      .then(() => {
-        console.log(ads);
+      .catch((err) => {
+        console.error(err);
       });
   }, []);
   if (ads.length === 0) {
@@ -38,13 +42,14 @@ export function Ads() {
       {ads.map((ad) => {
         return (
           <AdBanner
+            id={ad.id}
             key={ad.id}
             name={ad.name}
             yearsPlaying={ad.yearsPlaying}
-            discord={ad.discord}
             weekDays={ad.weekDays}
             hourStart={ad.hourStart}
             hourEnd={ad.hourEnd}
+            useVoiceMail={ad.useVoiceMail}
           />
         );
       })}
