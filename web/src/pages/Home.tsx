@@ -23,7 +23,8 @@ export function Home() {
   const [games, setGames] = useState<Game[]>([]);
 
   useEffect(() => {
-    axios("http://localhost:3333/games").then((response) =>
+    axios("http://localhost:3333/games").then((response) => {
+      console.log(response);
       setGames(
         response.data.sort((a: Game, b: Game) => {
           if (a.index > b.index) {
@@ -33,8 +34,8 @@ export function Home() {
             return -1;
           }
         })
-      )
-    );
+      );
+    });
   }, []);
   return (
     <div className="max-w-[1344px] mx-auto flex flex-col items-center my-20">
@@ -47,11 +48,15 @@ export function Home() {
         </span>{" "}
         is waiting
       </h1>
-      <div className="grid grid-flow-col auto-cols-[70%] sm:auto-cols-[20%] lg:auto-cols-[17%] overflow-x-auto scrollbar-invisible  gap-6 mt-16">
+      <div className="grid grid-cols-6 overflow-x-auto scrollbar  gap-6 mt-16">
         {games.map((game, index) => {
+          if (index > 5) {
+            return null;
+          }
           return (
             <GameBanner
               id={game.id}
+              key={game.id}
               title={game.title}
               bannerUrl={game.bannerUrl}
               adsCount={game._count.ads}

@@ -6,13 +6,13 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Game {
   id        String @id @default(uuid())
-  title     String
+  title     String @unique
   bannerUrl String
   index     Int
   ads       Ad[]
