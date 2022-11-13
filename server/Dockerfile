@@ -7,6 +7,7 @@ COPY package.json ./
 COPY prisma ./prisma/
 
 
+
 COPY tsconfig.json ./
 
 COPY . .
@@ -17,4 +18,4 @@ RUN npx prisma generate
 
 EXPOSE 3333
 
-CMD ["npm", "run", "build"]
+CMD ["npm", "run", "start"]
