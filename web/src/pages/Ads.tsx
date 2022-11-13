@@ -19,6 +19,14 @@ interface Ad {
 export function Ads() {
   const { id } = useParams();
   const [ads, setAds] = useState<Ad[]>([]);
+  const [discordDuoSelected, setDiscordDuoSelected] = useState("");
+
+  async function getDiscordUser(adsId: string) {
+    api(`/ads/${adsId}/discord`).then((data) => {
+      setDiscordDuoSelected(data.data.discord);
+      console.log(data.data.discord);
+    });
+  }
 
   useEffect(() => {
     api
@@ -50,6 +58,8 @@ export function Ads() {
             hourStart={ad.hourStart}
             hourEnd={ad.hourEnd}
             useVoiceMail={ad.useVoiceMail}
+            onConnect={() => getDiscordUser(ad.id)}
+            discordDuoSelected={discordDuoSelected}
           />
         );
       })}

@@ -11,7 +11,8 @@ interface AdBannerProps {
   hourEnd: number;
   useVoiceMail: boolean;
   id: string;
-  onClick: () => void;
+  discordDuoSelected: string;
+  onConnect: () => void;
 }
 
 export function AdBanner(props: AdBannerProps) {
@@ -43,11 +44,12 @@ export function AdBanner(props: AdBannerProps) {
         <Dialog.Trigger
           className="bg-violet-500 px-5 h-12 rounded-md  flex items-center justify-center gap-3 hover:bg-violet-600"
           type="submit"
+          onClick={props.onConnect}
         >
           <GameController size={24} />
           Connect
         </Dialog.Trigger>
-        <CreateDiscordModal id={props.id} />
+        <CreateDiscordModal discord={props.discordDuoSelected} />
       </Dialog.Root>
     </div>
   );

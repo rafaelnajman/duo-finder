@@ -4,17 +4,10 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 
 interface createDiscordModalProps {
-  id: string;
+  discord: string;
 }
 
 export function CreateDiscordModal(props: createDiscordModalProps) {
-  const [discord, setDiscord] = useState("");
-  useEffect(() => {
-    api.get(`ads/${props.id}/discord`).then((response) => {
-      setDiscord(response.data.discord);
-    });
-  }, []);
-
   return (
     <Dialog.Overlay className="fixed inset-0 z-10 overflow-y-auto">
       <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -53,7 +46,7 @@ export function CreateDiscordModal(props: createDiscordModalProps) {
                 Add the player on discord and start playing!
               </p>
               <div className=" p-4 rounded bg-zinc-900">
-                <p className="text-md text-zinc-200">{discord}</p>
+                <p className="text-md text-zinc-200">{props.discord}</p>
               </div>
             </div>
           </div>
